@@ -1,13 +1,15 @@
 package com.example.linah_alkhurayyif_notesapproom
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_row.view.*
 
-class NoteAdapter(private val activity: MainActivity): RecyclerView.Adapter<NoteAdapter.ItemViewHolder>() {
-    private var notes = emptyList<Note>()
+class NoteAdapter(
+    private val activity: MainActivity,
+    private val items: List<Note>): RecyclerView.Adapter<NoteAdapter.ItemViewHolder>() {
 
     class ItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
@@ -21,24 +23,19 @@ class NoteAdapter(private val activity: MainActivity): RecyclerView.Adapter<Note
         )
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val note = notes[position]
+    override fun onBindViewHolder(holder: NoteAdapter.ItemViewHolder, position: Int) {
+        val item = items[position]
 
         holder.itemView.apply {
-            note_tv.text = note.noteText
+            note_tv.text = item.noteText
             update.setOnClickListener {
-                activity.raiseDialog(note.id,note.noteText)
+                activity.raiseDialog(item.id)
             }
             del.setOnClickListener {
-                activity.mainViewModel.deleteNote(note.id)
+                activity.deleteNote(item.id)
             }
         }
     }
 
-    override fun getItemCount() = notes.size
-
-    fun update(notes: List<Note>){
-        this.notes = notes
-        notifyDataSetChanged()
-    }
+    override fun getItemCount() = items.size
 }
